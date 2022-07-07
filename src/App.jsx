@@ -19,7 +19,7 @@ import GraduationCreation from "./containers/Graduation/GraduationCreation";
 import GraduationIndex from "./containers/Graduation/GraduationIndex";
 import GraduationUpdate from "./containers/Graduation/GraduationUpdate";
 import CustomSelectSearch from "./components/Inputs/CustomSelectSearch";
-import ViewImage from "./containers/Menu/ViewImage";
+
 
 function App() {
   return (
@@ -72,7 +72,7 @@ function App() {
             path="/GraduationUpdate/:id"
             element={<GraduationUpdate />}
           />
-          <Route exact path="/ViewImage/:id" element={<ViewImage />} />
+        
         </Routes>
       </Router>
     </ThemeContext>

@@ -92,9 +92,9 @@ function MenuUpdate() {
       );
     axios.put(`${ApiUrl}/Menu/${id}`, storedata).then(
       (response) => {
-        // if (response.status == 200) {
-        //   window.location.href = "/MenuIndex";
-        // }
+        if (response.status == 200) {
+          window.location.href = "/MenuIndex";
+        }
 
         console.log(response.data);
       },

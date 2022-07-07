@@ -71,9 +71,9 @@ function MenuCreation() {
 
     axios.post(`${ApiUrl}/Menu`, storedata).then(
       (response) => {
-        // if (response.data.success == true) {
-        //   window.location.href = "/MenuIndex";
-        // }
+        if (response.data.success == true) {
+          window.location.href = "/MenuIndex";
+        }
 
         console.log(response);
         const dataArray = new FormData();
