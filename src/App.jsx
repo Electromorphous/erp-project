@@ -72,7 +72,7 @@ function App() {
             path="/GraduationUpdate/:id"
             element={<GraduationUpdate />}
           />
-        
+         
         </Routes>
       </Router>
     </ThemeContext>

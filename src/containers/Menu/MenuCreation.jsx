@@ -123,7 +123,7 @@ function MenuCreation() {
     setStoredata1([]);
     setstoredata({ ...storedata, module_id: Storedata1 });
   }
-
+console.log(storedata)
   return (
     <>
       <FormLayout>
