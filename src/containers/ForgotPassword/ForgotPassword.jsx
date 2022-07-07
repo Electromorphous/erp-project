@@ -4,7 +4,12 @@ import { makeStyles } from "@mui/styles";
 import { Box, Grid, Paper, Button } from "@mui/material";
 import ApiUrl from "../../services/Api";
 import CustomTextField from "../../components/Inputs/CustomTextField";
-
+import CustomButton from "../../components/Inputs/CustomButton";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import Dialog from "@material-ui/core/Dialog";
 import axios from "axios";
 const useStyles = makeStyles(() => ({
   form: {
@@ -22,6 +27,7 @@ function ForgotPassword() {
     email: "",
   });
   const [mail, setmail] = useState(false);
+  const [open, setOpen] = useState(false);
   const classes = useStyles();
   const paperStyle = {
     padding: 30,
@@ -31,15 +37,20 @@ function ForgotPassword() {
     borderRadius: 20,
   };
   function alerts() {
+    setOpen(true);
     setmail(true);
   }
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const onSubmit = () => {
     console.log(storedata);
     var path = "http://localhost:3000/ResetPassword?token=";
 
     axios
       .post(
-        `${ApiUrl}/forgotPassword?url_domain=${path}&email=${storedata.email}`,
+        `${ApiUrl}/forgotPassword?url_domain=${path}&username=${storedata.username}`,
         storedata,
         {
           headers: {
@@ -50,19 +61,22 @@ function ForgotPassword() {
       )
       .then(
         (response) => {
+          console.log(response);
+          setstoredata(response.data.data);
           if (response.status == 200) {
             alerts();
           }
           console.log("success");
           console.log(response.data);
         },
+
         (err) => {
           alert(err.response.data.message);
         }
       );
   };
-  function HandleEmail(e) {
-    setstoredata((prev) => ({ ...prev, email: e.target.value }));
+  function handleUsername(e) {
+    setstoredata((prev) => ({ ...prev, username: e.target.value }));
   }
   return (
     <>
@@ -85,35 +99,46 @@ function ForgotPassword() {
                 columnSpacing={{ xs: 2, md: 4 }}
               >
                 <Grid item xs={12}>
-                  <h2>Request password reset</h2>
+                  <h2>ERP password reset</h2>
                 </Grid>
                 <Grid item xs={12}>
-                  <h5>
-                    Please fill out your email. A link to reset password will be
-                    sent there.
-                  </h5>
+                  <h5>Please give username.</h5>
                 </Grid>
                 <Grid item xs={12}>
                   <CustomTextField
                     fullWidth
-                    label="Email"
+                    label="Username"
                     size="small"
-                    type="email"
-                    handleChange={HandleEmail}
+                    handleChange={handleUsername}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <Button fullWidth variant="contained" onClick={onSubmit}>
-                    Reset Password
+                    Submit
                   </Button>
-                  <Grid item xs={12}>
-                    {mail ? <span>Link Is Sent,Check Your Email</span> : ""}
-                  </Grid>
                 </Grid>
                 <Grid item xs={12} align="center">
                   <a href="/" className={classes.anchortag}>
                     Back
                   </a>
+                </Grid>
+                <Grid item>
+                  <Dialog open={open}>
+                    <DialogContent>
+                      <DialogContentText>
+                        <h4>{storedata.message}</h4>
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button
+                        onClick={handleClose}
+                        variant="contained"
+                        autoFocus
+                      >
+                        Ok
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
                 </Grid>
               </Grid>
             </>

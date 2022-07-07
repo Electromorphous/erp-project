@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Box, Grid, Paper, Button } from "@mui/material";
 import CustomTextField from "../../components/Inputs/CustomTextField";
-
+import CustomButton from "../../components/Inputs/CustomButton";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import Dialog from "@material-ui/core/Dialog";
 import ApiUrl from "../../services/Api";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
@@ -10,13 +15,6 @@ import { useSearchParams } from "react-router-dom";
 const useStyles = makeStyles(() => ({
   form: {
     padding: "20px 0",
-  },
-  paperStyle: {
-    padding: 30,
-    height: "50vh",
-    width: 350,
-    margin: "100px 50px",
-    borderRadius: 20,
   },
 }));
 
@@ -26,11 +24,24 @@ function ResetPassword() {
   const token = searchParams.get("token");
   const [storedata, setstoredata] = useState([]);
   const [reload, setreload] = useState(false);
+  const [open, setOpen] = useState(false);
+  const paperStyle = {
+    padding: 30,
+    height: "50vh",
+    width: 350,
+    margin: "100px 50px",
+    borderRadius: 20,
+  };
 
   function page() {
-    window.location.href = "/";
+    setOpen(true);
     setreload(true);
   }
+
+  const handleClose = () => {
+    window.location.href = "/";
+    setOpen(false);
+  };
 
   const onSubmit = () => {
     console.log(token);
@@ -71,7 +82,7 @@ function ResetPassword() {
           columnSpacing={{ xs: 2, md: 4 }}
         >
           {" "}
-          <Paper elevation={8} className={classes.paperStyle}>
+          <Paper elevation={8} style={paperStyle}>
             <>
               <Grid
                 container
@@ -97,12 +108,30 @@ function ResetPassword() {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  {reload ? <p>Password Changed</p> : ""}
+                  {reload ? <p>Password Changed Successfully</p> : ""}
                 </Grid>
                 <Grid item xs={12}>
                   <Button fullWidth variant="contained" onClick={onSubmit}>
                     Save
                   </Button>
+                </Grid>
+                <Grid item>
+                  <Dialog open={open}>
+                    <DialogContent>
+                      <DialogContentText>
+                        <h4>Your Password Has Been Changed Successfully</h4>
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button
+                        onClick={handleClose}
+                        variant="contained"
+                        autoFocus
+                      >
+                        Ok
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
                 </Grid>
               </Grid>
             </>
