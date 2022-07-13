@@ -16,9 +16,11 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import Dialog from "@material-ui/core/Dialog";
 import { Link } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 
-function RoleIndex() {
+function MenuIndex() {
   const [rows, setrows] = useState([]);
   const [Size, setSize] = useState(20);
   const [open, setOpen] = useState(false);
@@ -43,6 +45,8 @@ function RoleIndex() {
         `${ApiUrl}/fetchAllMenuDetails?page=${0}&page_size=${100}&sort=created_date`
       )
       .then((Response) => {
+        console.log(rows);
+
         setrows(Response.data.data.Paginated_data.content);
       });
   };
@@ -99,42 +103,12 @@ function RoleIndex() {
     { field: "menu_desc", headerName: "Description", flex: 1 },
     { field: "module_name", headerName: "Module Name", flex: 1 },
     { field: "created_username", headerName: "Created By", flex: 1 },
-    { field: "created_date", headerName: "Created Date", flex: 1 },
     {
-      field: "active",
-      headerName: "Active",
+      field: "created_date",
+      headerName: "Created Date",
       flex: 1,
-      type: "actions",
-      getActions: (params) => [
-        params.row.active === true ? (
-          <GridActionsCellItem
-            icon={<Check />}
-            label="Result"
-            style={{ color: "green" }}
-          >
-            {params.active}
-          </GridActionsCellItem>
-        ) : (
-          <GridActionsCellItem
-            icon={<HighlightOff />}
-            label="Result"
-            style={{ color: "red" }}
-          >
-            {params.active}
-          </GridActionsCellItem>
-        ),
-      ],
-    },
-    {
-      field: "id",
-      type: "actions",
-      flex: 1,
-      headerName: "Update",
-      getActions: (params) => [
-        <Link to={`/MenuUpdate/${params.row.id}`}>
-          <GridActionsCellItem icon={<EditIcon />} label="Update" />
-        </Link>,
-      ],
+      type: "date",
+      valueGetter: (params) => new Date(params.row.created_date),
     },
     {
       headerName: "View",
@@ -150,26 +124,41 @@ function RoleIndex() {
     },
 
     {
-      headerName: "Action",
-      field: "actions",
+      field: "id",
       type: "actions",
-      width: 150,
-      headerClassName: "headerClass",
+      flex: 1,
+      headerName: "Update",
       getActions: (params) => [
-        params.row.active == true ? (
+        <Link to={`/MenuUpdate/${params.row.id}`}>
+          <GridActionsCellItem icon={<EditIcon />} label="Update" />
+        </Link>,
+      ],
+    },
+
+    {
+      field: "active",
+      headerName: "Active",
+      flex: 1,
+      type: "actions",
+      getActions: (params) => [
+        params.row.active === true ? (
           <GridActionsCellItem
-            label="Deactivate"
-            icon={<PowerSettingsNewIcon />}
+            icon={<Check />}
+            label="Result"
+            style={{ color: "green" }}
             onClick={() => handleActive(params)}
-            style={{ color: "red" }}
-          />
+          >
+            {params.active}
+          </GridActionsCellItem>
         ) : (
           <GridActionsCellItem
-            label="Activate"
-            icon={<PowerSettingsNewIcon />}
+            icon={<HighlightOff />}
+            label="Result"
+            style={{ color: "red" }}
             onClick={() => handleActive(params)}
-            style={{ color: "green" }}
-          />
+          >
+            {params.active}
+          </GridActionsCellItem>
         ),
       ],
     },
@@ -179,7 +168,20 @@ function RoleIndex() {
     <>
       <Grid item>
         <Dialog open={open}>
-          <DialogTitle>Image Preview</DialogTitle>
+          <DialogTitle>
+            <IconButton
+              aria-label="close"
+              onClick={handleClose}
+              sx={{
+                position: "absolute",
+                right: 8,
+                top: 8,
+                color: (theme) => theme.palette.grey[500],
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
           <DialogContent align="center">
             {fileURL ? (
               <img
@@ -192,15 +194,11 @@ function RoleIndex() {
               </Box>
             )}
           </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} variant="contained" autoFocus>
-              Close
-            </Button>
-          </DialogActions>
+          <DialogActions></DialogActions>
         </Dialog>
       </Grid>
       <GridIndex rows={rows} columns={columns} Size={Size} />
     </>
   );
 }
-export default RoleIndex;
+export default MenuIndex;

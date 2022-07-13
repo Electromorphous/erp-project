@@ -58,31 +58,12 @@ function GraduationIndex() {
     },
 
     { field: "created_username", headerName: "Created By", flex: 1 },
-    { field: "created_date", headerName: "Created Date", flex: 1 },
     {
-      field: "active",
-      headerName: "Active",
+      field: "created_date",
+      headerName: "Created Date",
       flex: 1,
-      type: "actions",
-      getActions: (params) => [
-        params.row.active === true ? (
-          <GridActionsCellItem
-            icon={<Check />}
-            label="Result"
-            style={{ color: "green" }}
-          >
-            {params.active}
-          </GridActionsCellItem>
-        ) : (
-          <GridActionsCellItem
-            icon={<HighlightOff />}
-            label="Result"
-            style={{ color: "red" }}
-          >
-            {params.active}
-          </GridActionsCellItem>
-        ),
-      ],
+      type: "date",
+      valueGetter: (params) => new Date(params.row.created_date),
     },
     {
       field: "id",
@@ -96,26 +77,29 @@ function GraduationIndex() {
       ],
     },
     {
-      headerName: "Actions",
-      field: "actions",
+      field: "active",
+      headerName: "Active",
+      flex: 1,
       type: "actions",
-      width: 150,
-      headerClassName: "headerClass",
       getActions: (params) => [
-        params.row.active == true ? (
+        params.row.active === true ? (
           <GridActionsCellItem
-            label="Deactivate"
-            icon={<PowerSettingsNewIcon />}
+            icon={<Check />}
+            label="Result"
+            style={{ color: "green" }}
             onClick={() => handleActive(params)}
-            style={{ color: "red" }}
-          />
+          >
+            {params.active}
+          </GridActionsCellItem>
         ) : (
           <GridActionsCellItem
-            label="Activate"
-            icon={<PowerSettingsNewIcon />}
+            icon={<HighlightOff />}
+            label="Result"
+            style={{ color: "red" }}
             onClick={() => handleActive(params)}
-            style={{ color: "green" }}
-          />
+          >
+            {params.active}
+          </GridActionsCellItem>
         ),
       ],
     },

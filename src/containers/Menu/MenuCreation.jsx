@@ -80,7 +80,9 @@ function MenuCreation() {
 
         dataArray.append("file", selectedImage);
 
-        dataArray.append("menu_id", response.data.data.menu_id);
+        response.data.data.map((m) => {
+          dataArray.append("menu_id", m.menu_id);
+        });
 
         axios
           .post(`${ApiUrl}/menuUploadImage`, dataArray, {
@@ -123,7 +125,7 @@ function MenuCreation() {
     setStoredata1([]);
     setstoredata({ ...storedata, module_id: Storedata1 });
   }
-console.log(storedata)
+
   return (
     <>
       <FormLayout>

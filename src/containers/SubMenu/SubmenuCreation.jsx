@@ -7,7 +7,7 @@ import CustomTextField from "../../components/Inputs/CustomTextField";
 import FormLayout from "../../components/FormLayout";
 import Form from "../../components/Form";
 import CustomSelect from "../../components/Inputs/CustomSelect";
-import CustomSelectSearch from "../../components/Inputs/CustomSelectSearch";
+import CustomSelectSearchOne from "../../components/Inputs/CustomSelectSearchOne";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import axios from "axios";
@@ -23,6 +23,7 @@ function SubmenuCreation() {
   const classes = useStyles();
   const [Menu, setMenu] = useState([]);
   const [Storedata, setStoredata] = useState({ active: true });
+  const [Storedata1, setStoredata1] = useState([]);
   const [Menudata, setMenudata] = useState();
 
   function fetchMenu() {
@@ -58,9 +59,7 @@ function SubmenuCreation() {
   }));
 
   const handleMenu = (e, v) => {
-    v.map((m) => {
-      setStoredata({ ...Storedata, menu_id: m.value });
-    });
+    setStoredata({ ...Storedata, menu_id: v.value });
   };
   function handleName(e) {
     setStoredata((prev) => ({
@@ -118,7 +117,7 @@ function SubmenuCreation() {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                <CustomSelectSearch
+                <CustomSelectSearchOne
                   label="Menu"
                   options={Data}
                   handleChange={handleMenu}

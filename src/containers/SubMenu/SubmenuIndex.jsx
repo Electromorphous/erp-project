@@ -2,7 +2,6 @@ import { React, useEffect, useState } from "react";
 import ApiUrl from "../../services/Api";
 import axios from "axios";
 
-import ApiIndex from "../../components/Api/ApiIndex";
 import GridIndex from "../../components/GridIndex";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
@@ -48,6 +47,8 @@ function SubmenuIndex() {
   const [checked, setChecked] = useState([]);
   const [AssignedUserList, setAssignedUserList] = useState([]);
   const [UnAssignedUserList, setUnAssignedUserList] = useState([]);
+  const [checkedIDs, setCheckedIDs] = useState([]);
+  const [uncheckedIDs, setUncheckedIDs] = useState([]);
 
   const [AlertOpen, setAlertOpen] = useState(false);
   const [allUsers, setAllUsers] = useState([]);
@@ -58,8 +59,6 @@ function SubmenuIndex() {
         `${ApiUrl}/fetchAllSubMenuDetails?page=${0}&page_size=${100}&sort=created_date`
       )
       .then((Response) => {
-        console.log(Storedata);
-
         setrows(Response.data.data.Paginated_data.content);
       });
   };
@@ -75,6 +74,22 @@ function SubmenuIndex() {
       setAllUsers(response.data.data);
     });
   };
+  const handleSubMenuNameId = (e) => {
+    if (e.target.checked) {
+      const checkedID = e.target.id;
+      setCheckedIDs((ids) => [...ids, checkedID]);
+      const unchecked = uncheckedIDs.filter(
+        (id) => id.toString() !== checkedID
+      );
+      setUncheckedIDs(unchecked);
+    } else {
+      const uncheckedID = e.target.id;
+      setUncheckedIDs((ids) => [...ids, uncheckedID]);
+      const checked = checkedIDs.filter((id) => id.toString() !== uncheckedID);
+      console.log("Filtered Check", checked);
+      setCheckedIDs(checked);
+    }
+  };
 
   const handleOpen = (params) => {
     setStoredata({
@@ -86,16 +101,26 @@ function SubmenuIndex() {
       submenu_name: params.row.submenu_name,
       submenu_id: params.row.id,
     });
-
+    setOpen(true);
     axios
       .get(`${ApiUrl}/getSubMenuRelatedUser/${params.row.id}`)
       .then((response) => {
-        setAssignedUserList(response.data.data.AssignedUser);
-        setUnAssignedUserList(response.data.data.UnassignedUser);
-      });
+        console.log(response);
+        if (response.status === 200) {
+          if (!response.data.AssignedUser) {
+            setAssignedUserList([]);
+          } else {
+            setAssignedUserList(response.data.AssignedUser);
+          }
 
-    console.log(AssignedUserList);
-    setOpen(true);
+          if (!response.data.UnassignedUser[0]) {
+            setUnAssignedUserList([]);
+          } else {
+            setUnAssignedUserList(response.data.UnassignedUser);
+          }
+        }
+        console.log(AssignedUserList);
+      });
   };
 
   const handleClose = () => {
@@ -135,14 +160,11 @@ function SubmenuIndex() {
     }
   };
   function handleUserId(e, v) {
-    console.log(v);
-    console.log(Storedata1);
     v.map((m) => {
       Storedata1.push(m.value);
     });
     setStoredata1([]);
-
-    setStoredata({ ...Storedata, user_ids: Storedata1.toString() });
+    setStoredata((prev) => ({ ...prev, user_ids: Storedata1.toString() }));
   }
   const Data = allUsers.map((val) => ({
     label: val.username,
@@ -150,7 +172,6 @@ function SubmenuIndex() {
   }));
 
   const update = (e) => {
-    console.log(Storedata);
     e.preventDefault();
 
     axios
@@ -169,7 +190,13 @@ function SubmenuIndex() {
     { field: "submenu_url", headerName: "Url", flex: 1 },
     { field: "status", headerName: "Status", flex: 1 },
     { field: "created_username", headerName: "Created By", flex: 1 },
-    { field: "created_date", headerName: "Created Date", flex: 1 },
+    {
+      field: "created_date",
+      headerName: "Created Date",
+      flex: 1,
+      type: "date",
+      valueGetter: (params) => new Date(params.row.created_date),
+    },
     {
       headerName: "User Assignment",
       field: "actions",
@@ -204,6 +231,7 @@ function SubmenuIndex() {
             icon={<Check />}
             label="Result"
             style={{ color: "green" }}
+            onClick={() => handleActive(params)}
           >
             {params.active}
           </GridActionsCellItem>
@@ -212,6 +240,7 @@ function SubmenuIndex() {
             icon={<HighlightOff />}
             label="Result"
             style={{ color: "red" }}
+            onClick={() => handleActive(params)}
           >
             {params.active}
           </GridActionsCellItem>
@@ -229,21 +258,19 @@ function SubmenuIndex() {
         alertLabel="Updated Successfully"
       >
         <Stack sx={{ width: "100%" }} spacing={2}>
-          <Autocomplete
-            multiple
-            size="small"
-            id="combo-box-demo"
-            onChange={handleUserId}
-            options={Data}
-            sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Users" />}
-          />
-
-          {AlertOpen ? (
-            <Alert severity="success">Assigned Successfully</Alert>
-          ) : (
-            ""
-          )}
+          <Grid item xs={12} md={6}>
+            <CustomSelectSearch
+              options={Data}
+              label="Users"
+              handleChange={handleUserId}
+              name="id"
+            />
+            {AlertOpen ? (
+              <Alert severity="success">Assigned Successfully</Alert>
+            ) : (
+              ""
+            )}
+          </Grid>
         </Stack>
       </CustomDialogue>
 

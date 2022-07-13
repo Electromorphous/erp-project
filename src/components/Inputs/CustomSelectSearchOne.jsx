@@ -1,7 +1,7 @@
 import { Autocomplete, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 
-export default function CustomSelectSearch({
+export default function CustomSelectSearchOne({
   label,
   options,
   handleChange,
@@ -11,11 +11,9 @@ export default function CustomSelectSearch({
   function ok(o, v) {
     console.log(v.value);
   }
-
   return (
     <>
       <Autocomplete
-        multiple
         size="small"
         filterSelectedOptions
         options={options}

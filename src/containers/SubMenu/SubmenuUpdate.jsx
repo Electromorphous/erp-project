@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import { Grid, Paper } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import CustomTextField from "../../components/Inputs/CustomTextField";
-import CustomSelectSearch from "../../components/Inputs/CustomSelectSearch";
+import CustomSelectSearchOne from "../../components/Inputs/CustomSelectSearchOne";
 import CustomSelect from "../../components/Inputs/CustomSelect";
 import FormLayout from "../../components/FormLayout";
 import Form from "../../components/Form";
@@ -43,6 +43,9 @@ function SubmenuUpdate() {
     e.preventDefault();
     axios.put(`${ApiUrl}/SubMenu/${id}`, Storedata).then((Response) => {
       console.log(Response.data);
+      if (Response.status == 200) {
+        window.location.href = "/SubmenuIndex";
+      }
     });
   };
 
@@ -107,7 +110,7 @@ function SubmenuUpdate() {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                <CustomSelectSearch
+                <CustomSelectSearchOne
                   label="Menu"
                   options={Data}
                   handleChange={handleMenu}
