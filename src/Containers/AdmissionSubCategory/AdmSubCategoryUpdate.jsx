@@ -50,6 +50,7 @@ function AdmSubCategoryUpdate() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     var endPoint = "student/FeeAdmissionSubCategory";
     let data = await UpdateData(endPoint, Data, id);
     if (data === 200) {

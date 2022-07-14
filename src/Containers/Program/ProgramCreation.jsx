@@ -6,31 +6,20 @@ import CustomTextField from "../../components/Inputs/CustomTextField";
 import CustomButton from "../../components/Inputs/CustomButton";
 import SubmitData from "../../components/Api/SubmitData";
 
-function AcademicYearCreation() {
+function ProgramCreation() {
   const [Data, setData] = useState({ active: true });
-  const [Firstyear, setFirstyear] = useState([]);
-  const [Secondyear, setSecondyear] = useState([]);
   const handleChange = (e) => {
-    let Firstyearone = e.target.value;
-    setFirstyear(e.target.value);
-    let Secondyearone = parseInt(e.target.value) + 1;
-    setSecondyear(Secondyearone);
-    let concat = Firstyearone + "-" + Secondyearone;
-    setData({
-      ...Data,
-      ac_year: concat,
-      current_year: Firstyearone,
-      ac_year_code: Secondyearone,
-    });
+    setData({ ...Data, [e.target.name]: e.target.value });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let postData = await SubmitData("academic/academic_year", Data);
-    if (postData == 200) {
-      window.location.href = "/AcademicYearIndex";
+    let postData = await SubmitData("academic/Program", Data);
+    console.log(postData);
+    if (postData === 200) {
+      window.location.href = "/ProgramIndex";
     }
-    if (postData == 201) {
-      window.location.href = "/AcademicYearIndex";
+    if (postData === 201) {
+      window.location.href = "/ProgramIndex";
     }
   };
   return (
@@ -47,26 +36,21 @@ function AcademicYearCreation() {
             <>
               <Grid item xs={12} md={6}>
                 <CustomTextField
-                  type="number"
-                  label="Academic Year"
+                  label="Program"
+                  name="program_name"
                   handleChange={handleChange}
-                />
-                _
-                <CustomTextField
-                  value={Secondyear}
-                  handleChange={handleChange}
-                  disabled
+                  fullWidth
                 />
               </Grid>
-
-              <Grid item xs={2} md={2}>
+              <Grid item xs={12} md={6}>
                 <CustomTextField
-                  value={Firstyear}
-                  label="Current Year"
-                  disabled
+                  label="Short Name"
+                  name="program_short_name"
+                  handleChange={handleChange}
+                  fullWidth
                 />
               </Grid>
-              <Grid item>
+              <Grid item xs={12}>
                 <CustomButton label="Create" />
               </Grid>
             </>
@@ -76,4 +60,4 @@ function AcademicYearCreation() {
     </>
   );
 }
-export default AcademicYearCreation;
+export default ProgramCreation;

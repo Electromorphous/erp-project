@@ -8,43 +8,29 @@ import UpdateData from "../../components/Api/UpdateData";
 import { useParams } from "react-router-dom";
 import GetData from "../../components/Api/GetData";
 
-function AcademicYearUpdate() {
+function ProgramUpdate() {
   const { id } = useParams();
   const [Data, setData] = useState({ active: true });
-  const [Firstyear, setFirstyear] = useState([]);
-  const [Secondyear, setSecondyear] = useState([]);
   const getData = async () => {
-    let endPoint = "academic/academic_year";
+    let endPoint = "academic/Program";
     let getUpdatedata = await GetData(endPoint, id);
     setData(getUpdatedata);
   };
   useEffect(() => {
     getData();
   }, []);
-
   const handleChange = (e) => {
-    let Firstyearone = e.target.value;
-    setFirstyear(e.target.value);
-    let Secondyearone = parseInt(e.target.value) + 1;
-    setSecondyear(Secondyearone);
-    let concat = Firstyearone + "-" + Secondyearone;
-    setData({
-      ...Data,
-      ac_year: concat,
-      current_year: Firstyearone,
-      ac_year_code: Secondyearone,
-    });
-    console.log(Data);
+    setData({ ...Data, [e.target.name]: e.target.value });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    var endPoint = "academic/academic_year";
+    var endPoint = "academic/Program";
     let data = await UpdateData(endPoint, Data, id);
     if (data === 200) {
-      window.location.href = "/AcademicYearIndex";
+      window.location.href = "/ProgramIndex";
     }
     if (data === 201) {
-      window.location.href = "/AcademicYearIndex";
+      window.location.href = "/ProgramIndex";
     }
   };
 
@@ -62,22 +48,23 @@ function AcademicYearUpdate() {
             <>
               <Grid item xs={12} md={6}>
                 <CustomTextField
-                  label="Academic Year"
+                  label="Program"
+                  name="program_name"
                   handleChange={handleChange}
-                  value={Data.current_year ?? ""}
+                  value={Data.program_name ?? ""}
+                  fullWidth
                 />
-                _
-                <CustomTextField value={Data.ac_year_code ?? ""} disabled />
               </Grid>
-
-              <Grid item xs={12} md={2}>
+              <Grid item xs={12} md={6}>
                 <CustomTextField
-                  value={Data.current_year ?? ""}
-                  label="Current Year"
-                  disabled
+                  label="Short Name"
+                  name="program_short_name"
+                  handleChange={handleChange}
+                  value={Data.program_short_name ?? ""}
+                  fullWidth
                 />
               </Grid>
-              <Grid item>
+              <Grid item xs={12}>
                 <CustomButton label="Update"></CustomButton>
               </Grid>
             </>
@@ -87,4 +74,4 @@ function AcademicYearUpdate() {
     </>
   );
 }
-export default AcademicYearUpdate;
+export default ProgramUpdate;

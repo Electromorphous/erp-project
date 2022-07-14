@@ -50,6 +50,12 @@ import Tabs from "./containers/Tab/Tabs";
 import AcademicYearCreation from "./containers/AcademicYear/AcademicYearCreation";
 import AcademicYearIndex from "./containers/AcademicYear/AcademicYearIndex";
 import AcademicYearUpdate from "./containers/AcademicYear/AcademicYearUpdate";
+import ProgramCreation from "./containers/Program/ProgramCreation";
+import ProgramIndex from "./containers/Program/ProgramIndex";
+import ProgramUpdate from "./containers/Program/ProgramUpdate";
+import ProgramAssCreation from "./containers/ProgramAssignment/ProgramAssCreation";
+import ProgramAssIndex from "./containers/ProgramAssignment/ProgramAssIndex";
+
 function App() {
   return (
     <ThemeContext>
@@ -176,6 +182,11 @@ function App() {
             path="/AcademicYearUpdate/:id"
             element={<AcademicYearUpdate />}
           />
+          <Route path="/ProgramCreation" element={<ProgramCreation />} />
+          <Route path="/ProgramIndex" element={<ProgramIndex />} />
+          <Route path="/ProgramUpdate/:id" element={<ProgramUpdate />} />
+          <Route path="/ProgramAssCreation" element={<ProgramAssCreation />} />
+          <Route path="/ProgramAssIndex" element={<ProgramAssIndex />} />
         </Routes>
       </Router>
     </ThemeContext>

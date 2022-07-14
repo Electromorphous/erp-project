@@ -68,10 +68,10 @@ function SubmenuUpdate() {
       submenu_url: e.target.value,
     }));
   }
-  function handleMenu(e) {
+  function handleMenu(e, v) {
     setStoredata((prev) => ({
       ...prev,
-      menu_id: e.target.value,
+      menu_id: v.value,
     }));
   }
   function handleStatus(e) {
@@ -113,6 +113,7 @@ function SubmenuUpdate() {
                 <CustomSelectSearchOne
                   label="Menu"
                   options={Data}
+                  defaultValue={Storedata.menu_name ?? ""}
                   handleChange={handleMenu}
                   name="menu_id"
                 />
