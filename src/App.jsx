@@ -3,9 +3,12 @@ import Login from "./containers/Login/Login";
 import ThemeContext from "./utils/ThemeContext";
 import ForgotPassword from "./containers/ForgotPassword/ForgotPassword";
 import ResetPassword from "./containers/ResetPassword/ResetPassword";
-import ModuleCreation from "./containers/Organization/OrganizationCreation";
-import ModuleIndex from "./containers/Organization/OrganizationIndex";
-import ModuleUpdate from "./containers/Organization/OrganizationUpdate";
+import OrganizationCreation from "./containers/Organization/OrganizationCreation";
+import OrganizationIndex from "./containers/Organization/OrganizationIndex";
+import OrganizationUpdate from "./containers/Organization/OrganizationUpdate";
+import ModuleCreation from "./containers/Module/ModuleCreation";
+import ModuleIndex from "./containers/Module/ModuleIndex";
+import ModuleUpdate from "./containers/Module/ModuleUpdate";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -19,14 +22,21 @@ function App() {
           <Route
             exact
             path="/OrganizationCreation"
-            element={<ModuleCreation />}
+            element={<OrganizationCreation />}
           />
-          <Route exact path="/OrganizationIndex" element={<ModuleIndex />} />
+          <Route
+            exact
+            path="/OrganizationIndex"
+            element={<OrganizationIndex />}
+          />
           <Route
             exact
             path="/OrganizationUpdate/:id"
-            element={<ModuleUpdate />}
+            element={<OrganizationUpdate />}
           />
+          <Route exact path="/ModuleCreation" element={<ModuleCreation />} />
+          <Route exact path="/ModuleIndex" element={<ModuleIndex />} />
+          <Route exact path="/ModuleUpdate/:id" element={<ModuleUpdate />} />
         </Routes>
       </Router>
     </ThemeContext>

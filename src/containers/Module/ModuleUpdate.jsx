@@ -1,27 +1,40 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import Form from "../../components/Form";
 import FormLayout from "../../components/FormLayout";
 import CustomTextField from "../../components/Inputs/CustomTextField";
 import CustomButton from "../../components/Inputs/CustomButton";
-import SubmitData from "../../components/Api/SubmitData";
+import UpdateData from "../../components/Api/UpdateData";
+import { useParams } from "react-router-dom";
+import GetData from "../../components/Api/GetData";
 
-function OrganizationCreation() {
+function ModuleUpdate() {
+  const { id } = useParams();
   const [data, setData] = useState({ active: true });
+  const getData = async () => {
+    let endPoint = "Module";
+    let getUpdatedata = await GetData(endPoint, id);
+    setData(getUpdatedata);
+  };
+  useEffect(() => {
+    getData();
+  }, []);
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let postData = await SubmitData("institute/org", data);
-    console.log(postData);
-    if (postData === 200) {
-      window.location.href = "/OrganizationIndex";
+    let endPoint = "Module";
+    let Data = await UpdateData(endPoint, data, id);
+    console.log(Data);
+    if (Data === 200) {
+      window.location.href = "/ModuleIndex";
     }
-    if (postData === 201) {
-      window.location.href = "/OrganizationIndex";
+    if (Data === 201) {
+      window.location.href = "/ModuleIndex";
     }
   };
+
   return (
     <>
       <FormLayout>
@@ -36,22 +49,24 @@ function OrganizationCreation() {
             <>
               <Grid item xs={12} md={6}>
                 <CustomTextField
-                  label="Organization Name"
-                  name="org_name"
+                  label=" Module"
+                  name="module_name"
                   handleChange={handleChange}
+                  value={data.module_name ?? ""}
                   fullWidth
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <CustomTextField
-                  label="Organization Short Name"
-                  name="org_type"
+                  label="Short Name"
+                  name="module_short_name"
                   handleChange={handleChange}
+                  value={data.module_short_name ?? ""}
                   fullWidth
                 />
               </Grid>
               <Grid item xs={12}>
-                <CustomButton label="Create" />
+                <CustomButton label="Update"></CustomButton>
               </Grid>
             </>
           </Grid>
@@ -60,4 +75,4 @@ function OrganizationCreation() {
     </>
   );
 }
-export default OrganizationCreation;
+export default ModuleUpdate;

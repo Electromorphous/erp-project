@@ -6,20 +6,20 @@ import CustomTextField from "../../components/Inputs/CustomTextField";
 import CustomButton from "../../components/Inputs/CustomButton";
 import SubmitData from "../../components/Api/SubmitData";
 
-function OrganizationCreation() {
+function ModuleCreation() {
   const [data, setData] = useState({ active: true });
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let postData = await SubmitData("institute/org", data);
+    let postData = await SubmitData("Module", data);
     console.log(postData);
     if (postData === 200) {
-      window.location.href = "/OrganizationIndex";
+      window.location.href = "/ModuleIndex";
     }
     if (postData === 201) {
-      window.location.href = "/OrganizationIndex";
+      window.location.href = "/ModuleIndex";
     }
   };
   return (
@@ -36,16 +36,16 @@ function OrganizationCreation() {
             <>
               <Grid item xs={12} md={6}>
                 <CustomTextField
-                  label="Organization Name"
-                  name="org_name"
+                  label="Module"
+                  name="module_name"
                   handleChange={handleChange}
                   fullWidth
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <CustomTextField
-                  label="Organization Short Name"
-                  name="org_type"
+                  label="Short Name"
+                  name="module_short_name"
                   handleChange={handleChange}
                   fullWidth
                 />
@@ -60,4 +60,4 @@ function OrganizationCreation() {
     </>
   );
 }
-export default OrganizationCreation;
+export default ModuleCreation;

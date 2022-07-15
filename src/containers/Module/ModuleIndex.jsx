@@ -12,13 +12,14 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import { Button } from "@mui/material";
-function OrganizationIndex() {
+function ModuleIndex() {
   const [rows, setRows] = useState([]);
   const [open, setOpen] = useState(false);
   const [activeId, setActiveId] = useState();
   const [activateId, setActivateId] = useState(false);
+
   const getData = async () => {
-    let data = await Grid("institute/fetchAllOrgDetail", "created_date");
+    let data = await Grid("fetchAllModuleDetails", "created_date");
     setRows(data);
   };
   useEffect(() => {
@@ -45,9 +46,9 @@ function OrganizationIndex() {
     let check = activeId.active;
     let endPoint = "";
     if (check === true) {
-      endPoint = "institute/org";
+      endPoint = "Module";
     } else {
-      endPoint = "institute/activateOrg";
+      endPoint = "activateModule";
     }
 
     let data = await ActivateInactive(endPoint, id);
@@ -56,9 +57,10 @@ function OrganizationIndex() {
       setOpen(false);
     }
   };
+
   const columns = [
-    { field: "org_name", headerName: "Organization", flex: 1 },
-    { field: "org_type", headerName: "Short Name", flex: 1 },
+    { field: "module_name", headerName: "Module", flex: 1 },
+    { field: "module_short_name", headerName: "Short Name", flex: 1 },
     { field: "created_username", headerName: "Created By", flex: 1 },
     {
       field: "created_date",
@@ -72,7 +74,7 @@ function OrganizationIndex() {
       headerName: "Update",
       renderCell: (params) => {
         return (
-          <Link to={`/OrganizationUpdate/${params.row.id}`}>
+          <Link to={`/ModuleUpdate/${params.row.id}`}>
             <GridActionsCellItem icon={<EditIcon />} label="Update" />
           </Link>
         );
@@ -140,4 +142,4 @@ function OrganizationIndex() {
     </>
   );
 }
-export default OrganizationIndex;
+export default ModuleIndex;
