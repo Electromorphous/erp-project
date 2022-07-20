@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Grid, Paper, Button, Box } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-
-import ApiUrl from "../../services/Api";
+import StaffLogin from "../../components/LoginForms/StaffLogin";
 import background from "../../images/background.jpeg";
 import photo from "../../images/photo.png";
 import CustomTextField from "../../components/Inputs/CustomTextField";
@@ -17,6 +16,10 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 const styles = makeStyles(() => ({
   form: {
     padding: "10px 0",
+    background: `url(${background})`,
+    backgroundSize: "cover",
+    height: "100%",
+    width: "100%",
   },
   textField: {
     fontFamily: "Open Sans",
@@ -36,30 +39,28 @@ const styles = makeStyles(() => ({
     marginTop: "40px !important",
     backgroundColor: "#00A29A !important",
   },
-  btnstudent: {
+  btnStudent: {
     fontFamily: "Open Sans",
     marginTop: "40px",
   },
 
-  anchortag: {
+  anchorTag: {
     textDecoration: "none",
     color: "#00A29A !important",
     fontFamily: "Open Sans",
     fontStyle: "normal",
   },
-  ptag: {
+
+  signIn: {
+    position: "absolute",
     fontFamily: "Raleway",
-    fontSize: "40px",
-    letterSpacing: "-0.25px",
-    color: "#5A5D72 !important",
-    width: "285px",
-    height: "40px",
-  },
-  patag: {
-    fontFamily: "Raleway",
-    marginTop: "20px",
-    fontSize: "40px",
-    color: "#76546E !important",
+    fontStyle: "normal",
+    fontWeight: "445",
+    fontSize: "30px",
+    lineHeight: "2px",
+    textAlign: "right",
+    color: "#5C3C55",
+    opacity: 0.7,
   },
 }));
 
@@ -69,7 +70,7 @@ function Login() {
     password: "",
   });
 
-  const [visible, setvisible] = useState(false);
+  const [showStudent, setShowStudent] = useState("student");
 
   const classes = styles();
   const paperStyle = {
@@ -80,7 +81,7 @@ function Login() {
     borderRadius: 30,
   };
 
-  function handleusername(e) {
+  function handleUsername(e) {
     setValues((prev) => ({ ...prev, username: e.target.value }));
   }
 
@@ -119,54 +120,6 @@ function Login() {
     });
   }
 
-  function authenticateErp(e) {
-    e.preventDefault();
-
-    fetch(`${ApiUrl}/authenticate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(values),
-    })
-      .then((response) => {
-        response.json().then((result) => {
-          if (
-            values.username === result.data.userName &&
-            values.password === result.data.userName
-          ) {
-            localStorage.setItem(
-              "authenticate",
-              JSON.stringify({
-                login: true,
-                username1: result.data.userName,
-                token: result.data.token,
-                userId: result.data.userId,
-              })
-            );
-            if (result.status == 200) {
-              window.location.href = "/Header";
-            }
-            setValues({
-              login: true,
-            });
-          } else {
-            alert("Unauthorized");
-            setValues({ login: false });
-          }
-        });
-      })
-      .catch(() => {
-        alert("Error");
-      });
-  }
-  function click() {
-    setvisible(false);
-  }
-  function clicks() {
-    setvisible(true);
-  }
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
@@ -183,16 +136,7 @@ function Login() {
   };
   return (
     <>
-      <Box
-        component="form"
-        className={classes.form}
-        sx={{
-          background: `url(${background})`,
-          backgroundSize: "cover",
-          height: "100%",
-          width: "100%",
-        }}
-      >
+      <Box component="form" className={classes.form}>
         <Grid
           container
           direction="row"
@@ -204,7 +148,7 @@ function Login() {
               src={photo}
               alt=""
               style={{
-                width: "600px",
+                width: "40vw",
                 marginTop: "-140px",
                 marginRight: "280px",
               }}
@@ -223,188 +167,95 @@ function Login() {
                 </Grid>
               </Paper>
             </Grid>
-            <Grid
-              sx={{
-                position: "absolute",
-                fontFamily: "Raleway",
-                fontStyle: "normal",
-                fontWeight: "445",
-                fontSize: "30px",
-                lineHeight: "2px",
-                textAlign: "right",
-                color: "#5C3C55",
-                opacity: 0.7,
-              }}
-            >
+            <Grid className={classes.signIn}>
               <p>Sign In</p>
             </Grid>
 
-            {visible ? (
+            <Grid align="center" className={classes.btnStudent}>
+              <Button
+                variant="text"
+                onClick={() => setShowStudent("student")}
+                style={{
+                  color: showStudent == "student" ? "#76546E" : "#cccccc",
+                }}
+                id="font"
+              >
+                <h4> Staff</h4>
+              </Button>
+              |
+              <Button
+                variant="text"
+                id="fonts"
+                onClick={() => setShowStudent("staff")}
+                style={{
+                  color: showStudent == "staff" ? "#76546E" : "#cccccc",
+                }}
+              >
+                <h4> Student</h4>
+              </Button>
+            </Grid>
+            {showStudent === "student" ? (
               <>
-                <Grid align="center" className={classes.btnstudent}>
-                  <Button
-                    variant="text"
-                    onClick={click}
-                    style={{ color: "#cccccc" }}
-                    id="font"
-                  >
-                    <h4> Staff</h4>
-                  </Button>
-                  |
-                  <Button
-                    variant="text"
-                    id="fonts"
-                    onClick={clicks}
-                    style={{
-                      color: "#76546E",
-                    }}
-                  >
-                    <h4> Student</h4>
-                  </Button>
-                </Grid>
-
-                <Grid>
-                  <Grid item>
-                    <CustomTextField
-                      id="standard-basic"
-                      label="Enter AUID"
-                      variant="standard"
-                      style={{ marginTop: "30px" }}
-                      handleChange={handleusername}
-                      size="small"
-                      fullWidth
-                    />
-                  </Grid>
-
-                  <Grid style={{ marginTop: "20px" }}>
-                    <FormControl fullWidth variant="standard">
-                      <InputLabel htmlFor="standard-adornment-password">
-                        Password
-                      </InputLabel>
-                      <Input
-                        fullWidth
-                        id="standard-adornment-password"
-                        type={values.showPassword ? "text" : "password"}
-                        value={values.password}
-                        onChange={handleChange("password")}
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={handleClickShowPassword}
-                              onMouseDown={handleMouseDownPassword}
-                            >
-                              {values.showPassword ? (
-                                <VisibilityOff />
-                              ) : (
-                                <Visibility />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                      />
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Button
-                      fullWidth
-                      className={classes.btn}
-                      variant="contained"
-                      onClick={authenticateStudent}
-                      type="submit"
-                    >
-                      LOGIN
-                    </Button>
-                  </Grid>
-                  <Grid style={{ marginTop: "30px" }}>
-                    <a href="/ForgotPassword" className={classes.anchortag}>
-                      Forgot Password ?
-                    </a>
-                  </Grid>
-                </Grid>
+                <StaffLogin />
               </>
             ) : (
               <>
-                <Grid align="center" className={classes.btnstudent}>
+                {" "}
+                <Grid item xs={12}>
+                  <CustomTextField
+                    id="standard-basic"
+                    label="Enter AUID"
+                    variant="standard"
+                    style={{ marginTop: "30px" }}
+                    handleChange={handleUsername}
+                    size="small"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12} style={{ marginTop: "20px" }}>
+                  <FormControl fullWidth variant="standard">
+                    <InputLabel htmlFor="standard-adornment-password">
+                      Password
+                    </InputLabel>
+                    <Input
+                      fullWidth
+                      id="standard-adornment-password"
+                      type={values.showPassword ? "text" : "password"}
+                      value={values.password}
+                      onChange={handleChange("password")}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                          >
+                            {values.showPassword ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
                   <Button
-                    variant="text"
-                    onClick={click}
-                    style={{ color: "#76546E" }}
-                    id="font"
+                    fullWidth
+                    className={classes.btn}
+                    variant="contained"
+                    onClick={authenticateStudent}
+                    type="submit"
                   >
-                    <h4> Staff</h4>
-                  </Button>
-                  |
-                  <Button
-                    variant="text"
-                    id="fonts"
-                    onClick={clicks}
-                    style={{
-                      color: "#cccccc",
-                    }}
-                  >
-                    <h4> Student</h4>
+                    LOGIN
                   </Button>
                 </Grid>
-
-                <Grid>
-                  <Grid item>
-                    <CustomTextField
-                      label="Username"
-                      placeholder="Enter Username"
-                      variant="standard"
-                      style={{ marginTop: "30px" }}
-                      className={classes.textField}
-                      handleChange={handleusername}
-                      size="small"
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid style={{ marginTop: "20px" }}>
-                    <FormControl fullWidth variant="standard">
-                      <InputLabel htmlFor="standard-adornment-password">
-                        Password
-                      </InputLabel>
-                      <Input
-                        fullWidth
-                        id="standard-adornment-password"
-                        type={values.showPassword ? "text" : "password"}
-                        value={values.password}
-                        onChange={handleChange("password")}
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={handleClickShowPassword}
-                              onMouseDown={handleMouseDownPassword}
-                            >
-                              {values.showPassword ? (
-                                <VisibilityOff />
-                              ) : (
-                                <Visibility />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                      />
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Button
-                      fullWidth
-                      className={classes.btn}
-                      variant="contained"
-                      onClick={authenticateErp}
-                      type="submit"
-                    >
-                      LOGIN
-                    </Button>
-                  </Grid>
-                  <Grid style={{ marginTop: "30px" }}>
-                    <a href="/ForgotPassword" className={classes.anchortag}>
-                      Forgot Password ?
-                    </a>
-                  </Grid>
+                <Grid style={{ marginTop: "30px" }}>
+                  <a href="/ForgotPassword" className={classes.anchorTag}>
+                    Forgot Password ?
+                  </a>
                 </Grid>
               </>
             )}
