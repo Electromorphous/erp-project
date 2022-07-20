@@ -14,6 +14,7 @@ function App() {
           <Route exact path="/" element={<Login />}></Route>
           <Route exact path="/ForgotPassword" element={<ForgotPassword />} />
           <Route exact path="/ResetPassword" element={<ResetPassword />} />
+          <Route exact path="/StaffLogin" element={<StaffLogin />} />
         </Routes>
       </Router>
     </ThemeContext>
