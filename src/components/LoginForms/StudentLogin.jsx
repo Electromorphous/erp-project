@@ -1,7 +1,6 @@
 import React from "react";
 import { Grid, Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import ApiUrl from "../../services/Api";
 import background from "../../images/background.jpeg";
 import CustomTextField from "../../components/Inputs/CustomTextField";
 import FormControl from "@mui/material/FormControl";
@@ -39,7 +38,7 @@ const styles = makeStyles(() => ({
   },
 }));
 
-function StaffLogin() {
+function StudentLogin() {
   const [values, setValues] = React.useState({
     username: "",
     password: "",
@@ -51,47 +50,39 @@ function StaffLogin() {
     setValues((prev) => ({ ...prev, username: e.target.value }));
   }
 
-  function authenticateErp(e) {
-    e.preventDefault();
-
-    fetch(`${ApiUrl}/authenticate`, {
+  function authenticateStudent() {
+    alert("Still api is not created");
+    fetch("", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Contect-Type": "application/json",
         Accept: "application/json",
       },
       body: JSON.stringify(values),
-    })
-      .then((response) => {
-        response.json().then((result) => {
-          if (
-            values.username === result.data.userName &&
-            values.password === result.data.userName
-          ) {
-            localStorage.setItem(
-              "authenticate",
-              JSON.stringify({
-                login: true,
-                username1: result.data.userName,
-                token: result.data.token,
-                userId: result.data.userId,
-              })
-            );
-            if (result.status == 200) {
-              window.location.href = "/Header";
-            }
-            setValues({
-              login: true,
-            });
-          } else {
-            alert("Unauthorized");
-            setValues({ login: false });
-          }
-        });
-      })
-      .catch(() => {
-        alert("Error");
+    }).then((response) => {
+      response.json().then((result) => {
+        if (
+          values.username === result.userName &&
+          values.password === result.userName
+        ) {
+          localStorage.setItem(
+            "studentauthenticate",
+            JSON.stringify({
+              Studentlogin: true,
+              username1: result.userName,
+              token: result.token,
+              userId: result.userId,
+            })
+          );
+          setValues({
+            Studentlogin: true,
+          });
+        } else {
+          alert("unauthorized");
+          setValues({ Studentlogin: false });
+        }
       });
+    });
   }
 
   const handleChange = (prop) => (event) => {
@@ -113,7 +104,7 @@ function StaffLogin() {
       <Grid item xs={12}>
         <CustomTextField
           id="standard-basic"
-          label="Enter Username"
+          label="Enter AUID"
           variant="standard"
           style={{ marginTop: "30px" }}
           handleChange={handleUsername}
@@ -151,7 +142,7 @@ function StaffLogin() {
           fullWidth
           className={classes.btn}
           variant="contained"
-          onClick={authenticateErp}
+          onClick={authenticateStudent}
           type="submit"
         >
           LOGIN
@@ -161,8 +152,8 @@ function StaffLogin() {
         <a href="/ForgotPassword" className={classes.anchorTag}>
           Forgot Password ?
         </a>
-      </Grid>{" "}
+      </Grid>
     </>
   );
 }
-export default StaffLogin;
+export default StudentLogin;
