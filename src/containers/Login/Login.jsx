@@ -62,7 +62,7 @@ function Login() {
   const paperStyle = {
     padding: 30,
     height: "72vh",
-    width: 380,
+    width: "60vh",
     margin: "100px 40px",
     borderRadius: 30,
   };
@@ -72,66 +72,77 @@ function Login() {
       <Box
         component="form"
         className={classes.form}
-        sx={{ background: { xs: "block", md: "block", lg: `url(${College})` } }}
+        sx={{
+          background: {
+            xs: "block",
+            md: "block",
+            lg: `url(${College})`,
+          },
+        }}
       >
         <Grid container>
-          <Grid
-            item
-            container
-            xs={12}
-            direction="row"
-            justifyContent="right"
-            alignItems="right"
-          >
-            <Paper elevation={8} style={paperStyle}>
-              <Grid item xs={4} align="left">
-                <Paper className={classes.paperStyle1}>
-                  <Grid item xs={6} align="center">
-                    <img
-                      src={logo4}
-                      alt=""
-                      style={{ width: "54px", marginTop: "4px" }}
-                    />
-                  </Grid>
-                </Paper>
-              </Grid>
+          <Grid item xs={12}>
+            <Grid
+              container
+              direction="row"
+              justifyContent="right"
+              alignItems="right"
+            >
+              <Paper elevation={8} style={paperStyle}>
+                <Grid item xs={4} align="left">
+                  <Paper className={classes.paperStyle1}>
+                    <Grid item xs={6} align="center">
+                      <img
+                        src={logo4}
+                        alt=""
+                        style={{ width: "54px", marginTop: "4px" }}
+                      />
+                    </Grid>
+                  </Paper>
+                </Grid>
 
-              <Grid item xs={4} className={classes.signIn}>
-                <p>Sign In</p>
-              </Grid>
+                <Grid item xs={4} className={classes.signIn}>
+                  <p>Sign In</p>
+                </Grid>
 
-              <Grid item xs={12} align="center" className={classes.btnStudent}>
-                <Button
-                  variant="text"
-                  onClick={() => setShowStaff("staff")}
-                  style={{
-                    color: showStaff == "student" ? "#cccccc" : "#76546E",
-                  }}
-                  id="font"
+                <Grid
+                  item
+                  xs={12}
+                  align="center"
+                  className={classes.btnStudent}
                 >
-                  <h4> Staff</h4>
-                </Button>
-                |
-                <Button
-                  variant="text"
-                  id="fonts"
-                  onClick={() => setShowStaff("student")}
-                  style={{
-                    color: showStaff == "staff" ? "#cccccc" : "#76546E",
-                  }}
-                >
-                  <h4> Student</h4>
-                </Button>
-              </Grid>
+                  <Button
+                    variant="text"
+                    onClick={() => setShowStaff("staff")}
+                    style={{
+                      color: showStaff == "student" ? "#cccccc" : "#76546E",
+                    }}
+                    id="font"
+                  >
+                    <h4> Staff</h4>
+                  </Button>
+                  |
+                  <Button
+                    variant="text"
+                    id="fonts"
+                    onClick={() => setShowStaff("student")}
+                    style={{
+                      color: showStaff == "staff" ? "#cccccc" : "#76546E",
+                    }}
+                  >
+                    <h4> Student</h4>
+                  </Button>
+                </Grid>
 
-              {showStaff == "staff" ? (
-                <StaffLogin />
-              ) : (
-                <>
-                  <StudentLogin />
-                </>
-              )}
-            </Paper>
+                {showStaff == "staff" ? (
+                  <StaffLogin />
+                ) : (
+                  <>
+                    <StudentLogin />
+                  </>
+                )}
+              </Paper>
+            </Grid>
           </Grid>
         </Grid>
       </Box>
