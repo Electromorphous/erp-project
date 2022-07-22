@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-
 import { makeStyles } from "@mui/styles";
 import { Box, Grid, Paper, Button } from "@mui/material";
 import ApiUrl from "../../services/Api";
 import CustomTextField from "../../components/Inputs/CustomTextField";
-
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -30,9 +28,9 @@ function ForgotPassword() {
   const [open, setOpen] = useState(false);
   const classes = useStyles();
   const paperStyle = {
+    width: 320,
+    height: 300,
     padding: 30,
-    height: "50vh",
-    width: 350,
     margin: "100px 50px",
     borderRadius: 20,
   };

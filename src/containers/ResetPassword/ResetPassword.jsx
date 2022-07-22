@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Box, Grid, Paper, Button } from "@mui/material";
 import CustomTextField from "../../components/Inputs/CustomTextField";
-import CustomButton from "../../components/Inputs/CustomButton";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import ApiUrl from "../../services/Api";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
@@ -25,10 +23,11 @@ function ResetPassword() {
   const [storedata, setstoredata] = useState([]);
   const [reload, setreload] = useState(false);
   const [open, setOpen] = useState(false);
+  const [show, setShow] = useState(false);
   const paperStyle = {
+    width: 320,
+    height: 300,
     padding: 30,
-    height: "50vh",
-    width: 350,
     margin: "100px 50px",
     borderRadius: 20,
   };
@@ -71,6 +70,16 @@ function ResetPassword() {
   function handleChange(e) {
     setstoredata({ ...storedata, [e.target.name]: e.target.value });
   }
+
+  function handleConfirm(e) {
+    if (storedata.password !== e.target.value) {
+      setShow(true);
+    }
+    if (storedata.password == e.target.value) {
+      setShow(false);
+    }
+    setstoredata({ ...storedata, confirm: e.target.value });
+  }
   return (
     <>
       <Box component="form" className={classes.form}>
@@ -100,13 +109,24 @@ function ResetPassword() {
                 <Grid item xs={12}>
                   <CustomTextField
                     fullWidth
-                    label="Password"
+                    label="Enter New Password"
                     size="small"
                     type="password"
                     name="password"
                     handleChange={handleChange}
                   />
                 </Grid>
+                <Grid item xs={12}>
+                  <CustomTextField
+                    fullWidth
+                    label="Re-Confirm Password"
+                    size="small"
+                    type="password"
+                    name="password"
+                    handleChange={handleConfirm}
+                  />
+                </Grid>
+                {show ? <p>Password did not match</p> : ""}
                 <Grid item xs={12}>
                   {reload ? <p>Password Changed Successfully</p> : ""}
                 </Grid>

@@ -110,58 +110,67 @@ function StaffLogin() {
   };
   return (
     <>
-      <Grid item xs={12}>
-        <CustomTextField
-          id="standard-basic"
-          label="Enter Username"
-          variant="standard"
-          style={{ marginTop: "30px" }}
-          handleChange={handleUsername}
-          size="small"
-          fullWidth
-        />
-      </Grid>
-      <Grid item xs={12} style={{ marginTop: "20px" }}>
-        <FormControl fullWidth variant="standard">
-          <InputLabel htmlFor="standard-adornment-password">
-            Password
-          </InputLabel>
-          <Input
+      <Grid
+        container
+        direction="row"
+        alignItems="center"
+        justifyContent="flex-start"
+        rowSpacing={0}
+        columnSpacing={{ xs: 2, md: 2 }}
+      >
+        <Grid item xs={12}>
+          <CustomTextField
+            id="standard-basic"
+            label="Enter Username"
+            variant="standard"
+            style={{ marginTop: "30px" }}
+            handleChange={handleUsername}
+            size="small"
             fullWidth
-            id="standard-adornment-password"
-            type={values.showPassword ? "text" : "password"}
-            value={values.password}
-            onChange={handleChange("password")}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                >
-                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
           />
-        </FormControl>
+        </Grid>
+        <Grid item xs={12} style={{ marginTop: "20px" }}>
+          <FormControl fullWidth variant="standard">
+            <InputLabel htmlFor="standard-adornment-password">
+              Password
+            </InputLabel>
+            <Input
+              fullWidth
+              id="standard-adornment-password"
+              type={values.showPassword ? "text" : "password"}
+              value={values.password}
+              onChange={handleChange("password")}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                  >
+                    {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          <Button
+            fullWidth
+            className={classes.btn}
+            variant="contained"
+            onClick={authenticateErp}
+            type="submit"
+          >
+            LOGIN
+          </Button>
+        </Grid>
+        <Grid item xs={8} md={6} style={{ marginTop: "30px" }}>
+          <a href="/ForgotPassword" className={classes.anchorTag}>
+            Forgot Password ?
+          </a>
+        </Grid>{" "}
       </Grid>
-      <Grid item xs={12}>
-        <Button
-          fullWidth
-          className={classes.btn}
-          variant="contained"
-          onClick={authenticateErp}
-          type="submit"
-        >
-          LOGIN
-        </Button>
-      </Grid>
-      <Grid item xs={6} style={{ marginTop: "30px" }}>
-        <a href="/ForgotPassword" className={classes.anchorTag}>
-          Forgot Password ?
-        </a>
-      </Grid>{" "}
     </>
   );
 }

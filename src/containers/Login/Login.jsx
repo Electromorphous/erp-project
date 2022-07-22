@@ -7,6 +7,7 @@ import logo4 from "../../images/logo4.png";
 import StudentLogin from "../../components/LoginForms/StudentLogin";
 const styles = makeStyles(() => ({
   form: {
+    display: "flex",
     padding: "10px 0",
     backgroundSize: "cover",
     height: "100%",
@@ -60,10 +61,10 @@ function Login() {
 
   const classes = styles();
   const paperStyle = {
-    padding: 30,
-    height: "72vh",
-    width: "60vh",
-    margin: "100px 40px",
+    width: 350,
+    height: 450,
+    padding: "22px",
+    margin: "120px 40px",
     borderRadius: 30,
   };
 
@@ -82,14 +83,9 @@ function Login() {
       >
         <Grid container>
           <Grid item xs={12}>
-            <Grid
-              container
-              direction="row"
-              justifyContent="right"
-              alignItems="right"
-            >
+            <Grid container align="right" justifyContent="right">
               <Paper elevation={8} style={paperStyle}>
-                <Grid item xs={4} align="left">
+                <Grid item xs={12} align="left">
                   <Paper className={classes.paperStyle1}>
                     <Grid item xs={6} align="center">
                       <img
