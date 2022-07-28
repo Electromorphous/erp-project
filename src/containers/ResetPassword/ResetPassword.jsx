@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import { Box, Grid, Paper, Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { Box, Grid, Paper, Button } from "@mui/material";
 import CustomTextField from "../../components/Inputs/CustomTextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
 import ApiUrl from "../../services/Api";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
@@ -9,13 +13,6 @@ import { useSearchParams } from "react-router-dom";
 const useStyles = makeStyles(() => ({
   form: {
     padding: "20px 0",
-  },
-  paperStyle: {
-    padding: 30,
-    height: "50vh",
-    width: 350,
-    margin: "100px 50px",
-    borderRadius: 20,
   },
 }));
 
@@ -25,11 +22,25 @@ function ResetPassword() {
   const token = searchParams.get("token");
   const [storedata, setstoredata] = useState([]);
   const [reload, setreload] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [show, setShow] = useState(false);
+  const paperStyle = {
+    width: 320,
+    height: 300,
+    padding: 30,
+    margin: "100px 50px",
+    borderRadius: 20,
+  };
 
   function page() {
-    window.location.href = "/";
+    setOpen(true);
     setreload(true);
   }
+
+  const handleClose = () => {
+    window.location.href = "/";
+    setOpen(false);
+  };
 
   const onSubmit = () => {
     console.log(token);
@@ -59,6 +70,16 @@ function ResetPassword() {
   function handleChange(e) {
     setstoredata({ ...storedata, [e.target.name]: e.target.value });
   }
+
+  function handleConfirm(e) {
+    if (storedata.password !== e.target.value) {
+      setShow(true);
+    }
+    if (storedata.password == e.target.value) {
+      setShow(false);
+    }
+    setstoredata({ ...storedata, confirm: e.target.value });
+  }
   return (
     <>
       <Box component="form" className={classes.form}>
@@ -69,7 +90,8 @@ function ResetPassword() {
           rowSpacing={2}
           columnSpacing={{ xs: 2, md: 4 }}
         >
-          <Paper elevation={8} className={classes.paperStyle}>
+          {" "}
+          <Paper elevation={8} style={paperStyle}>
             <>
               <Grid
                 container
@@ -87,7 +109,7 @@ function ResetPassword() {
                 <Grid item xs={12}>
                   <CustomTextField
                     fullWidth
-                    label="Password"
+                    label="Enter New Password"
                     size="small"
                     type="password"
                     name="password"
@@ -95,12 +117,41 @@ function ResetPassword() {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  {reload ? <p>Password Changed</p> : ""}
+                  <CustomTextField
+                    fullWidth
+                    label="Re-Confirm Password"
+                    size="small"
+                    type="password"
+                    name="password"
+                    handleChange={handleConfirm}
+                  />
+                </Grid>
+                {show ? <p>Password did not match</p> : ""}
+                <Grid item xs={12}>
+                  {reload ? <p>Password Changed Successfully</p> : ""}
                 </Grid>
                 <Grid item xs={12}>
                   <Button fullWidth variant="contained" onClick={onSubmit}>
                     Save
                   </Button>
+                </Grid>
+                <Grid item>
+                  <Dialog open={open}>
+                    <DialogContent>
+                      <DialogContentText>
+                        <h4>Your Password Has Been Changed Successfully</h4>
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button
+                        onClick={handleClose}
+                        variant="contained"
+                        autoFocus
+                      >
+                        Ok
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
                 </Grid>
               </Grid>
             </>
