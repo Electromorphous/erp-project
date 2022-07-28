@@ -8,23 +8,28 @@ import StudentLogin from "../../components/LoginForms/StudentLogin";
 const styles = makeStyles(() => ({
   form: {
     display: "flex",
-    padding: "10px 0",
+    padding: "20px 0px",
     backgroundSize: "cover",
-    height: "100%",
+    height: "95%",
     width: "100%",
   },
   textField: {
     fontFamily: "Open Sans",
     cursor: "none",
   },
+  paperStyle: {
+    width: "350px",
+    height: "440px",
+    padding: "22px",
+    margin: "100px 40px",
+    borderRadius: "30px !important",
+  },
   paperStyle1: {
     borderRadius: "22px !important",
-    marginLeft: "125px",
     marginTop: "-55px",
     height: "60px",
     width: "60px",
   },
-
   btn: {
     fontFamily: "Open Sans",
     fontStyle: "normal",
@@ -35,20 +40,18 @@ const styles = makeStyles(() => ({
     fontFamily: "Open Sans",
     marginTop: "40px !important",
   },
-
   anchorTag: {
     textDecoration: "none",
     color: "#00A29A !important",
     fontFamily: "Open Sans",
     fontStyle: "normal",
   },
-
   signIn: {
     position: "absolute",
     fontFamily: "Raleway",
     fontStyle: "normal",
     fontWeight: "445",
-    fontSize: "30px",
+    fontSize: "28px",
     lineHeight: "2px",
     textAlign: "right",
     color: "#5C3C55",
@@ -60,13 +63,6 @@ function Login() {
   const [showStaff, setShowStaff] = useState("staff");
 
   const classes = styles();
-  const paperStyle = {
-    width: 350,
-    height: 450,
-    padding: "22px",
-    margin: "120px 40px",
-    borderRadius: 30,
-  };
 
   return (
     <>
@@ -84,20 +80,22 @@ function Login() {
         <Grid container>
           <Grid item xs={12}>
             <Grid container align="right" justifyContent="right">
-              <Paper elevation={8} style={paperStyle}>
-                <Grid item xs={12} align="left">
-                  <Paper className={classes.paperStyle1}>
-                    <Grid item xs={6} align="center">
-                      <img
-                        src={logo4}
-                        alt=""
-                        style={{ width: "54px", marginTop: "4px" }}
-                      />
-                    </Grid>
-                  </Paper>
+              <Paper elevation={8} className={classes.paperStyle}>
+                <Grid container>
+                  <Grid item xs={12} align="center">
+                    <Paper className={classes.paperStyle1}>
+                      <Grid item xs={12} align="center">
+                        <img
+                          src={logo4}
+                          alt=""
+                          style={{ width: "54px", marginTop: "4px" }}
+                        />
+                      </Grid>
+                    </Paper>
+                  </Grid>
                 </Grid>
 
-                <Grid item xs={4} className={classes.signIn}>
+                <Grid item xs={6} className={classes.signIn}>
                   <p>Sign In</p>
                 </Grid>
 
@@ -130,13 +128,7 @@ function Login() {
                   </Button>
                 </Grid>
 
-                {showStaff == "staff" ? (
-                  <StaffLogin />
-                ) : (
-                  <>
-                    <StudentLogin />
-                  </>
-                )}
+                {showStaff == "staff" ? <StaffLogin /> : <StudentLogin />}
               </Paper>
             </Grid>
           </Grid>

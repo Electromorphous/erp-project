@@ -1,16 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Grid, Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import ApiUrl from "../../services/Api";
 import background from "../../images/background.jpeg";
 import CustomTextField from "../../components/Inputs/CustomTextField";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Input from "@mui/material/Input";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import CustomPassword from "../../components/Inputs/CustomPassword";
+import axios from "axios";
 const styles = makeStyles(() => ({
   form: {
     padding: "10px 0",
@@ -40,74 +35,57 @@ const styles = makeStyles(() => ({
 }));
 
 function StaffLogin() {
-  const [values, setValues] = React.useState({
-    username: "",
-    password: "",
+  const [values, setValues] = useState({
+    active: true,
   });
 
   const classes = styles();
 
-  function handleUsername(e) {
-    setValues((prev) => ({ ...prev, username: e.target.value }));
-  }
-
   function authenticateErp(e) {
     e.preventDefault();
-
-    fetch(`${ApiUrl}/authenticate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(values),
-    })
+    axios
+      .post(`${ApiUrl}/authenticate`, values, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(values),
+      })
       .then((response) => {
-        response.json().then((result) => {
-          if (
-            values.username === result.data.userName &&
-            values.password === result.data.userName
-          ) {
-            localStorage.setItem(
-              "authenticate",
-              JSON.stringify({
-                login: true,
-                username1: result.data.userName,
-                token: result.data.token,
-                userId: result.data.userId,
-              })
-            );
-            if (result.status == 200) {
-              window.location.href = "/Header";
-            }
-            setValues({
+        console.log(response);
+        if (
+          values.username == response.data.data.userName &&
+          values.password == response.data.data.userName
+        ) {
+          localStorage.setItem(
+            "authenticate",
+            JSON.stringify({
               login: true,
-            });
-          } else {
-            alert("Unauthorized");
-            setValues({ login: false });
+              username1: response.data.data.userName,
+              token: response.data.data.token,
+              userId: response.data.data.userId,
+            })
+          );
+          if (response.status == 200) {
+            window.location.href = "/Header";
           }
-        });
+          setValues({
+            login: true,
+          });
+        } else {
+          alert("Unauthorized");
+          setValues({ login: false });
+        }
       })
       .catch(() => {
         alert("Error");
       });
   }
 
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
+  const handleChange = (e) => {
+    setValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
-    });
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
   return (
     <>
       <Grid
@@ -120,39 +98,22 @@ function StaffLogin() {
       >
         <Grid item xs={12}>
           <CustomTextField
-            id="standard-basic"
             label="Enter Username"
-            variant="standard"
+            variant="outlined"
+            name="username"
             style={{ marginTop: "30px" }}
-            handleChange={handleUsername}
+            handleChange={handleChange}
             size="small"
             fullWidth
           />
         </Grid>
         <Grid item xs={12} style={{ marginTop: "20px" }}>
-          <FormControl fullWidth variant="standard">
-            <InputLabel htmlFor="standard-adornment-password">
-              Password
-            </InputLabel>
-            <Input
-              fullWidth
-              id="standard-adornment-password"
-              type={values.showPassword ? "text" : "password"}
-              value={values.password}
-              onChange={handleChange("password")}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                  >
-                    {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </FormControl>
+          <CustomPassword
+            name="password"
+            label="Password"
+            handleChange={handleChange}
+            fullWidth
+          />
         </Grid>
         <Grid item xs={12}>
           <Button
@@ -165,7 +126,7 @@ function StaffLogin() {
             LOGIN
           </Button>
         </Grid>
-        <Grid item xs={8} md={6} style={{ marginTop: "30px" }}>
+        <Grid item xs={10} md={6} style={{ marginTop: "30px" }}>
           <a href="/ForgotPassword" className={classes.anchorTag}>
             Forgot Password ?
           </a>
