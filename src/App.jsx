@@ -1,21 +1,22 @@
 import React from "react";
-// import CustomizedSteppers from './components/Steppers/DesktopFormStepper';
-import UserCreationForm from "./components/Forms/UserCreationForm";
-import FormGroup from "@mui/material/FormGroup";
-import Header from "./components/Header";
 import ThemeContext from "./utils/ThemeContext";
-import Login from "./components/Pages/Login";
-import Navigationbar from "./components/Pages/Navigationbar";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Login from "./containers/Login/Login";
+import RoleIndex from "./containers/Role/RoleIndex";
+import RoleCreation from "./containers/Role/RoleCreation";
+import RoleUpdate from "./containers/Role/RoleUpdate";
+
 function App() {
   return (
     <ThemeContext>
-      {/* <FormGroup> */}
-      <Header />
-      {/* <CustomizedSteppers /> */}
-      <UserCreationForm />
-      {/* </FormGroup> */}
-      {/* <Login/> */}
-      {/* <Navigationbar/> */}
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />}></Route>
+          <Route path="RoleIndex" element={<RoleIndex />}></Route>
+          <Route path="RoleCreation" element={<RoleCreation />}></Route>
+          <Route path="RoleUpdate/:id" element={<RoleUpdate />}></Route>
+        </Routes>
+      </Router>
     </ThemeContext>
   );
 }

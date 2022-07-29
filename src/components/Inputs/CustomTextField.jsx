@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from "react";
 import { TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
@@ -10,23 +10,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function CustomTextField({
-  name,
-  value,
-  handleChange,
-  error,
-  required,
-  regex,
-  ...props
-}) {
-  const [showError, setShowError] = useState(false);
-
+function CustomTextField({ name, value, handleChange, error, ...props }) {
   const classes = useStyles();
-
-  const checkField = () => {
-    if ((required && !value) || (regex && !regex.test(value)))
-      setShowError(true);
-  };
 
   return (
     <>
@@ -34,16 +19,12 @@ function CustomTextField({
         error={!!error}
         name={name}
         value={value}
-        onChange={() => {
-          handleChange();
-          setShowError(false);
-        }}
-        onBlur={checkField}
+        onChange={handleChange}
         size="small"
-        required={required}
+        fullWidth
         {...props}
       />
-      {error && showError && <p className={classes.errorText}>{error}</p>}
+      {error && <p className={classes.errorText}>{error}</p>}
     </>
   );
 }
